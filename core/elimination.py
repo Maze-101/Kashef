@@ -21,9 +21,24 @@ def forward_elimination(A, b):
 
     for i in range(n):
         A, b = partial_pivot(A, b, i);
+
         if np.isclose(A[i,i], 0.0):
             raise ValueError("Matrix is singular.");
+    
         for j in range(i + 1, n):
             factor = A[j,i] / A[i,i];
             A[j,i:] -= factor * A[i,i:];
             b[j] -= factor * b[i];
+
+    return A,b;
+
+def back_substitution(U, y):
+    x = np.zeros_like(y);
+
+    n = U.shape[0];
+
+    for i in range(n - 1, -1, -1):
+    
+        x[i] = (y[i] - (U[i,i+1:] @ x[i+1:])) / U[i,i];
+    
+    return x;
