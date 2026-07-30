@@ -1,6 +1,6 @@
 # Kashef - Linear Systems Solver with NumPy
 
-A lightweight, robust, and highly modular Python implementation of Gaussian Elimination with partial pivoting and back-substitution. This project builds a linear system solver from scratch using only core NumPy matrix slicing and vectorized operations, avoiding high-level abstractions like `np.linalg.solve`.
+A lightweight Python implementation of Gaussian Elimination with partial pivoting and back-substitution. This project builds a linear system solver from scratch using only core NumPy matrix slicing and vectorized operations, avoiding high-level abstractions like `np.linalg.solve`.
 
 ---
 ## Requirements
