@@ -1,22 +1,29 @@
 import numpy as np
 
-def partial_pivot(A, b, current_row):
-    n = A.shape[0]
+def partial_pivot(A, b, current_row):    
+    column_slice = A[current_row:, current_row];
     
-    # 1. Get all elements in the 'current_row' column, from 'current_row' down to the bottom
-    column_slice = A[current_row:, current_row]
+    max_index_in_slice = np.argmax(np.abs(column_slice));
     
-    # 2. Find the index of the largest ABSOLUTE value in that slice
-    # np.argmax returns the index relative to the slice (starting at 0)
-    max_index_in_slice = np.argmax(np.abs(column_slice))
+    max_row = current_row + max_index_in_slice;
     
-    # 3. Convert that slice index back to the actual matrix row index
-    max_row = current_row + max_index_in_slice
-    
-    # 4. Swap the rows if a larger pivot was found below
     if max_row != current_row:
-        # NumPy trick to swap rows simultaneously in-place
-        A[[current_row, max_row]] = A[[max_row, current_row]]
-        b[[current_row, max_row]] = b[[max_row, current_row]]
+        A[[current_row, max_row]] = A[[max_row, current_row]];
+        b[[current_row, max_row]] = b[[max_row, current_row]];
         
     return A, b
+
+def forward_elimination(A, b):
+    A = A.astype(np.float64);
+    b = b.astype(np.float64);
+
+    n = A.shape[0];
+
+    for i in range(n):
+        A, b = partial_pivot(A, b, i);
+        if np.isclose(A[i,i], 0.0):
+            raise ValueError("Matrix is singular.");
+        for j in range(i + 1, n):
+            factor = A[j,i] / A[i,i];
+            A[j,i:] -= factor * A[i,i:];
+            b[j] -= factor * b[i];
